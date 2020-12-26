@@ -1,0 +1,40 @@
+# vsim work.Neuron_tb 
+# Start time: 09:17:32 on Dec 26,2020
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading ieee.math_real(body)
+# Loading work.neuron_package
+# Loading work.neuron_tb(behavioral)
+# Loading work.neuron(behavioral)
+add wave -position end  sim:/neuron_tb/Run
+add wave -position end  sim:/neuron_tb/Input_N
+add wave -position end  sim:/neuron_tb/IValid
+add wave -position end  sim:/neuron_tb/Inputs
+add wave -position end  sim:/neuron_tb/Weights
+add wave -position end  sim:/neuron_tb/Bias
+add wave -position end  sim:/neuron_tb/OValid
+add wave -position end  sim:/neuron_tb/Address
+add wave -position end  sim:/neuron_tb/Output
+add wave -position 0  sim:/neuron_tb/CLK
+add wave -position end  sim:/neuron_tb/Neuron1/CLK
+add wave -position end  sim:/neuron_tb/Neuron1/Run
+add wave -position end  sim:/neuron_tb/Neuron1/Input_N
+add wave -position end  sim:/neuron_tb/Neuron1/IValid
+add wave -position end  sim:/neuron_tb/Neuron1/Inputs
+add wave -position end  sim:/neuron_tb/Neuron1/Weights
+add wave -position end  sim:/neuron_tb/Neuron1/Bias
+add wave -position end  sim:/neuron_tb/Neuron1/OValid
+add wave -position end  sim:/neuron_tb/Neuron1/Address
+add wave -position end  sim:/neuron_tb/Neuron1/Output
+add wave -position end  sim:/neuron_tb/Neuron1/sum_s
+add wave -position end  sim:/neuron_tb/Neuron1/pre_sum_s
+run
+# WARNING: No extended dataflow license exists
+add wave -position end  sim:/neuron_tb/Neuron1/sum_bits
+add wave -position end  sim:/neuron_tb/Neuron1/pre_sum_bits
+restart
+run
+# End time: 10:38:05 on Dec 26,2020, Elapsed time: 1:20:33
+# Errors: 0, Warnings: 1

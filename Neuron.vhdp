@@ -1,0 +1,104 @@
+Component Neuron
+(
+    Include
+    (
+        
+        IEEE.STD_LOGIC_1164.ALL,
+        IEEE.numeric_std.all,
+        IEEE.math_real.all,
+        Neuron_Package.all,
+    );
+    
+    Package Neuron_Package
+    (
+        CONSTANT Neuron_Width : NATURAL := 16;    --x bit neuron values
+        CONSTANT Weight_Width : NATURAL := 16;    --x bit weight values
+        CONSTANT Bias_Width   : NATURAL := 16;    --x bit bias value
+        TYPE Neuron_Inputs IS ARRAY (natural range <>) OF UNSIGNED(Neuron_Width-1 downto 0);
+        TYPE Neuron_Weights IS ARRAY (natural range <>) OF SIGNED(Weight_Width-1 downto 0);
+    );
+
+    Generic
+    (
+        MAX_Input_Number  : NATURAL := 128;  --max. x neurons in previous layer
+        Operations        : NATURAL := 8;    --x calculations at a time
+    );
+    
+    Run     : IN  STD_LOGIC := '0';                           --Set to '1' for calculation
+    Input_N : IN  NATURAL range 0 to MAX_Input_Number := 0;   --Number of neurons in previous layer
+    IValid  : IN  STD_LOGIC := '0';                           --Set to '1' if the input, weight and bias data are correct for the current address
+    Inputs  : IN  Neuron_Inputs(Operations-1 downto 0);       --Values of neurons from previous layer
+    Weights : IN  Neuron_Weights(Operations-1 downto 0);      --Weights for neurons from the previous layer
+    Bias    : IN  SIGNED(Bias_Width-1 downto 0);              --Bias for this neuron
+    
+    OValid  : OUT STD_LOGIC := '0';                           --'1' if
+    Address : BUFFER NATURAL range 0 to MAX_Input_Number-1 := 0;  --Start address of neuron in previous layer (with 100 inputs and 10 operations = 0, 10, 20, ...)
+    Output  : OUT UNSIGNED(Neuron_Width-1 downto 0);
+)
+{
+    TYPE state IS (start, calc);
+    
+    CONSTANT Sigmoid_Res : NATURAL := 16;
+    CONSTANT sum_bits  : NATURAL := integer(ceil(log2(real(Max_Input_Number+1)))) + Neuron_Width;
+    CONSTANT pre_sum_bits : NATURAL := integer(ceil(log2(real(Operations)))) + Neuron_Width;
+    
+    Process ()
+    {
+        VARIABLE cur_state : state := start;
+        
+        VARIABLE sum       : SIGNED(sum_bits-1 downto 0);
+        SIGNAL   sum_s     : SIGNED(sum_bits-1 downto 0);
+        VARIABLE sum_v     : INTEGER range -1 * 2**(sum_bits-1) to 2**(sum_bits-1) - 1;
+        Case(cur_state)
+        {
+            When(start)
+            {
+                If(Run = '1')
+                {
+                    Address   <= 0;
+                    OValid    <= '0';
+                    sum       := (others => '0');
+                    cur_state := calc;
+                }
+            }
+            When(calc)
+            {
+                If(IValid = '1')
+                {
+                    
+                    VARIABLE pre_sum      : SIGNED(pre_sum_bits-1 downto 0);
+                    SIGNAL   pre_sum_s    : SIGNED(pre_sum_bits-1 downto 0);
+                    pre_sum := (others => '0');
+                    --Pre_sum = Neuron(Address) * Weight(Address) + Neuron(Address+1) * Weight(Address+1) + ... + Neuron(Address+Operations-1) * Weight(Address+Operations-1)
+                    For(i IN 0 to Operations-1)
+                    {
+                        pre_sum := pre_sum + TO_SIGNED(TO_INTEGER(Inputs(i))*TO_INTEGER(Weights(i)), Neuron_Width+Weight_Width)(Neuron_Width+Weight_Width-1 downto Weight_Width);
+                    }
+                    --Sum = Neuron(0) * Weight(0) + ... + Neuron(Input_N-1) * Weight(Input_N-1)
+                    pre_sum_s <= pre_sum;
+                    sum     := sum + pre_sum;
+                    sum_s   <= sum;
+                    If(Address + Operations < Input_N)
+                    {
+                        Address <= Address + Operations;
+                    }
+                    Else
+                    {
+                        --Sum = Bias + Neuron(0) * Weight(0) + ... + Neuron(Input_N-1) * Weight(Input_N-1)
+                        sum   := sum + Bias;
+
+                        --Make the sum a value fitting the sigmoid functions resolution (because it is implemented in a lookup table)
+                        sum_v := TO_INTEGER(sum(Neuron_Width+3 downto Neuron_Width+3-Sigmoid_Res));
+                        --SIGMOID (Look up table with x/(2^Neuron_width)))
+                        
+                        --SIGMOID: >8* and <-8* 2^(Neuron_Width-1) = 1 or 0
+                        --Lookup table function: from -8 to 8 * 2^16
+                        
+                        Output <= TO_UNSIGNED(sum_v, Output'LENGTH);
+                        cur_state := start;
+                    }
+                }
+            }
+        }
+    }
+}

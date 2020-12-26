@@ -1,0 +1,68 @@
+Main
+(
+    led: OUT STD_LOGIC := '0';
+)
+{
+    Process()
+    {
+        Thread
+        {
+            led <= '0';
+            Wait(250ms);
+            led <= '1';
+            Wait(250ms);
+        }
+    }
+    
+    SIGNAL ISSP_source : std_logic_vector (7 downto 0);
+    SIGNAL ISSP_probe  : std_logic_vector (31 downto 0) := (others => 'X');
+    NewComponent ISSP
+    (
+        source => ISSP_source,
+        probe  => ISSP_probe,
+    );
+    
+    Process ()
+    {
+        Inputs(0) <= UNSIGNED(ISSP_source & NOT ISSP_source);
+        For(i IN 1 to 7)
+        {
+            Inputs(i) <= shift_right(Inputs(0),i);
+        }
+        Weights(0) <= SIGNED(NOT ISSP_source & ISSP_source);
+        For(i IN 1 to 7)
+        {
+            Weights(i) <= shift_left(Weights(0),i);
+        }
+        
+        Bias <= SIGNED(ISSP_source & ISSP_source);
+    }
+    
+    ISSP_probe(0) <= OValid;
+    ISSP_probe(Neuron_Width downto 1) <= STD_LOGIC_VECTOR(Output);
+    
+    SIGNAL Run              : STD_LOGIC := '1';
+    SIGNAL Input_N          : NATURAL        range 0 to 128 := 128;
+    SIGNAL IValid           : STD_LOGIC := '1';
+    SIGNAL Inputs           : Neuron_Inputs  (8-1 downto 0);
+    SIGNAL Weights          : Neuron_Weights (8-1 downto 0);
+    SIGNAL Bias             : SIGNED         (Bias_Width-1 downto 0);
+    SIGNAL OValid           : STD_LOGIC := '0';
+    SIGNAL Address          : NATURAL        range 0 to 128-1 := 0;
+    SIGNAL Output           : UNSIGNED         (Neuron_Width-1 downto 0);
+    NewComponent Neuron
+    (
+        MAX_Input_Number => 128,
+        Operations       => 8,
+
+        Run              => Run,
+        Input_N          => Input_N,
+        IValid           => IValid,
+        Inputs           => Inputs,
+        Weights          => Weights,
+        Bias             => Bias,
+        OValid           => OValid,
+        Address          => Address,
+        Output           => Output,
+    );
+}
