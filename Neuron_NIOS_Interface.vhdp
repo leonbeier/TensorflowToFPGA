@@ -1,0 +1,31 @@
+Component Neuron_NIOS_Interface
+(
+    pi_export                  : OUT   STD_LOGIC_VECTOR(31 downto 0) := (others => 'X');
+    po_export                  : IN    STD_LOGIC_VECTOR(31 downto 0) := (others => 'X');
+    po2_export                 : IN    STD_LOGIC_VECTOR(31 downto 0) := (others => 'X');
+)
+{
+    SIGNAL Neuron_Run              : STD_LOGIC := '0';
+    SIGNAL Neuron_Input_N          : NATURAL   range 0 to 128 := 0;
+    SIGNAL Neuron_IValid           : STD_LOGIC := '0';
+    SIGNAL Neuron_Input            : UNSIGNED  (Neuron_Width-1 downto 0);
+    SIGNAL Neuron_Weight           : SIGNED    (Weight_Width-1 downto 0);
+    SIGNAL Neuron_Bias             : SIGNED    (Bias_Width-1 downto 0);
+    SIGNAL Neuron_OValid           : STD_LOGIC := '0';
+    SIGNAL Neuron_Address          : NATURAL   range 0 to 128-1 := 0;
+    SIGNAL Neuron_Output           : UNSIGNED  (Neuron_Width-1 downto 0);
+    NewComponent Neuron
+    (
+        MAX_Input_Number => 128,
+
+        Run              => Neuron_Run,
+        Input_N          => Neuron_Input_N,
+        IValid           => Neuron_IValid,
+        Input            => Neuron_Input,
+        Weight           => Neuron_Weight,
+        Bias             => Neuron_Bias,
+        OValid           => Neuron_OValid,
+        Address          => Neuron_Address,
+        Output           => Neuron_Output,
+    );
+}

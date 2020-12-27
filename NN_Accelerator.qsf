@@ -1,0 +1,84 @@
+#OfficialHardware: Core MAX10 | Please do not remove this line!
+set_global_assignment -name FAMILY "MAX 10"
+set_global_assignment -name DEVICE 10M08SAU169C8G
+set_global_assignment -name TOP_LEVEL_ENTITY NN_Accelerator
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
+set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
+set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
+set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR 1
+set_global_assignment -name ENABLE_OCT_DONE OFF
+set_global_assignment -name USE_CONFIGURATION_DEVICE ON
+set_global_assignment -name CRC_ERROR_OPEN_DRAIN OFF
+set_global_assignment -name ENABLE_BOOT_SEL_PIN OFF
+set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -rise
+set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -fall
+set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -rise
+set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -fall
+set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
+set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
+set_global_assignment -name LAST_QUARTUS_VERSION "18.1.0 Lite Edition"
+set_global_assignment -name TCL_SCRIPT_FILE Libraries/NIOSDuino/avalon_pwm_hw.tcl
+set_global_assignment -name TCL_SCRIPT_FILE Libraries/NIOSDuino/avalon_pwm_sw.tcl
+set_global_assignment -name NUM_PARALLEL_PROCESSORS 8
+set_global_assignment -name INTERNAL_FLASH_UPDATE_MODE "SINGLE IMAGE"
+set_global_assignment -name VHDL_FILE Generated/NIOSDuino_Processor.vhd
+set_global_assignment -name VHDL_FILE Generated/NN_Accelerator.vhd
+set_global_assignment -name VHDL_FILE Generated/Neuron.vhd
+set_global_assignment -name VHDL_FILE Generated/Neuron_NIOS_Interface.vhd
+set_global_assignment -name QSYS_FILE Libraries/ISSP/ISSP.qsys
+set_global_assignment -name QSYS_FILE Libraries/NIOSDuino/NIOSDuino_Core.qsys
+set_global_assignment -name VERILOG_FILE Libraries/NIOSDuino/avalon_pwm.v
+set_global_assignment -name TCL_SCRIPT_FILE Libraries/NIOSDuino/avalon_pwm_hw.tcl
+set_global_assignment -name TCL_SCRIPT_FILE Libraries/NIOSDuino/avalon_pwm_sw.tcl
+set_global_assignment -name QIP_FILE Libraries/PLL/PLL.qip
+set_global_assignment -name VHDL_FILE Libraries/PLL/PLL.vhd
+set_global_assignment -name VHDL_FILE Sigmoid.vhd
+set_location_assignment PIN_H6 -to CLK
+set_location_assignment PIN_D7 -to Reset
+set_location_assignment PIN_J9 -to sdram_addr[0]
+set_location_assignment PIN_J10 -to sdram_addr[1]
+set_location_assignment PIN_K10 -to sdram_addr[2]
+set_location_assignment PIN_K11 -to sdram_addr[3]
+set_location_assignment PIN_L12 -to sdram_addr[4]
+set_location_assignment PIN_K12 -to sdram_addr[5]
+set_location_assignment PIN_L13 -to sdram_addr[6]
+set_location_assignment PIN_J12 -to sdram_addr[7]
+set_location_assignment PIN_J13 -to sdram_addr[8]
+set_location_assignment PIN_G13 -to sdram_addr[9]
+set_location_assignment PIN_H9 -to sdram_addr[10]
+set_location_assignment PIN_H13 -to sdram_addr[11]
+set_location_assignment PIN_G12 -to sdram_ba[0]
+set_location_assignment PIN_H8 -to sdram_ba[1]
+set_location_assignment PIN_G10 -to sdram_cas_n
+set_location_assignment PIN_L3 -to sdram_clk_clk
+set_location_assignment PIN_F8 -to sdram_ras_n
+set_location_assignment PIN_G9 -to sdram_we_n
+set_location_assignment PIN_F9 -to sdram_dqm[0]
+set_location_assignment PIN_F10 -to sdram_dqm[1]
+set_location_assignment PIN_A12 -to sdram_dq[0]
+set_location_assignment PIN_B11 -to sdram_dq[1]
+set_location_assignment PIN_B12 -to sdram_dq[2]
+set_location_assignment PIN_C11 -to sdram_dq[3]
+set_location_assignment PIN_C12 -to sdram_dq[4]
+set_location_assignment PIN_D9 -to sdram_dq[5]
+set_location_assignment PIN_E9 -to sdram_dq[6]
+set_location_assignment PIN_E10 -to sdram_dq[7]
+set_location_assignment PIN_F13 -to sdram_dq[8]
+set_location_assignment PIN_F12 -to sdram_dq[9]
+set_location_assignment PIN_E13 -to sdram_dq[10]
+set_location_assignment PIN_E12 -to sdram_dq[11]
+set_location_assignment PIN_D12 -to sdram_dq[12]
+set_location_assignment PIN_C13 -to sdram_dq[13]
+set_location_assignment PIN_D11 -to sdram_dq[14]
+set_location_assignment PIN_B13 -to sdram_dq[15]
+set_location_assignment PIN_A2 -to flash_MISO
+set_location_assignment PIN_B4 -to flash_SCLK
+set_location_assignment PIN_B2 -to flash_MOSI
+set_location_assignment PIN_H1 -to VS[0]
+set_location_assignment PIN_B7 -to VS[1]
+set_location_assignment PIN_L1 -to VS[2]
+set_location_assignment PIN_K13 -to VS_EN
+set_location_assignment PIN_A5 -to flash_SS
+set_location_assignment PIN_D13 -to LED
+set_location_assignment PIN_J1 -to uart_rxd
+set_location_assignment PIN_H4 -to uart_txd

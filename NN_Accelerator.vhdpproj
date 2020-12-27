@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<ProjectRoot xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Header>NN_Accelerator</Header>
+  <Items xsi:type="ProjectFolder">
+    <Header>Generated</Header>
+    <Items xsi:type="ProjectFileVHDL">
+      <Header>NIOSDuino_Processor.vhd</Header>
+    </Items>
+    <Items xsi:type="ProjectFileVHDL">
+      <Header>NN_Accelerator.vhd</Header>
+    </Items>
+    <Items xsi:type="ProjectFileVHDL">
+      <Header>Neuron.vhd</Header>
+    </Items>
+    <Items xsi:type="ProjectFileVHDL">
+      <Header>Neuron_NIOS_Interface.vhd</Header>
+    </Items>
+  </Items>
+  <Items xsi:type="ProjectFolder">
+    <Header>Libraries</Header>
+    <Items xsi:type="ProjectFolder">
+      <Header>ISSP</Header>
+      <Items xsi:type="ProjectFile">
+        <Header>ISSP.qsys</Header>
+      </Items>
+      <Items xsi:type="ProjectFileVHDP">
+        <Header>ISSP.qsys.vhdp</Header>
+      </Items>
+    </Items>
+    <Items xsi:type="ProjectFolder">
+      <Header>NIOSDuino</Header>
+      <Items xsi:type="ProjectFile">
+        <Header>NIOSDuino_Core.qsys</Header>
+      </Items>
+      <Items xsi:type="ProjectFileVHDP">
+        <Header>NIOSDuino_Core.vhdp</Header>
+      </Items>
+      <Items xsi:type="ProjectFileVerilog">
+        <Header>avalon_pwm.v</Header>
+      </Items>
+      <Items xsi:type="ProjectFile">
+        <Header>avalon_pwm_hw.tcl</Header>
+      </Items>
+      <Items xsi:type="ProjectFile">
+        <Header>avalon_pwm_sw.tcl</Header>
+      </Items>
+    </Items>
+    <Items xsi:type="ProjectFolder">
+      <Header>PLL</Header>
+      <Items xsi:type="ProjectFile">
+        <Header>PLL.qip</Header>
+      </Items>
+      <Items xsi:type="ProjectFileVHDL">
+        <Header>PLL.vhd</Header>
+      </Items>
+    </Items>
+  </Items>
+  <Items xsi:type="ProjectFolder">
+    <Header>Software</Header>
+    <Items xsi:type="ProjectFolder">
+      <Header>NIOSDuino</Header>
+      <Items xsi:type="ProjectFile">
+        <Header>NIOSDuino.cpp</Header>
+      </Items>
+    </Items>
+  </Items>
+  <Items xsi:type="ProjectFileVHDP">
+    <Header>NN_Accelerator.vhdp</Header>
+  </Items>
+  <Items xsi:type="ProjectFileVHDP">
+    <Header>Neuron.vhdp</Header>
+  </Items>
+  <Items xsi:type="ProjectFileVHDP">
+    <Header>Neuron_NIOS_Interface.vhdp</Header>
+  </Items>
+  <Items xsi:type="ProjectFileVHDL">
+    <Header>Sigmoid.vhd</Header>
+  </Items>
+  <CruviHSExtensions>
+    <string xsi:nil="true" />
+  </CruviHSExtensions>
+  <CruviLSExtensions>
+    <string xsi:nil="true" />
+    <string xsi:nil="true" />
+    <string xsi:nil="true" />
+    <string xsi:nil="true" />
+  </CruviLSExtensions>
+  <IOVoltage>0</IOVoltage>
+  <SoftwareStartPathRelative>Software\NIOSDuino</SoftwareStartPathRelative>
+  <UseShield>false</UseShield>
+</ProjectRoot>

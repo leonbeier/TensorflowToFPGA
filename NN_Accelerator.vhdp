@@ -1,0 +1,64 @@
+Main
+(
+    LED           : OUT STD_LOGIC;
+    
+    Reset         : IN STD_LOGIC;
+    sdram_addr    : OUT STD_LOGIC_VECTOR (11 downto 0);
+    sdram_ba      : OUT STD_LOGIC_VECTOR (1 downto 0);
+    sdram_cas_n   : OUT STD_LOGIC;
+    sdram_dq      : INOUT STD_LOGIC_VECTOR (15 downto 0) := (others => 'X');
+    sdram_dqm     : OUT STD_LOGIC_VECTOR (1 downto 0);
+    sdram_ras_n   : OUT STD_LOGIC;
+    sdram_we_n    : OUT STD_LOGIC;
+    sdram_clk_clk : OUT STD_LOGIC;
+    flash_MISO    : IN STD_LOGIC := '0';
+    flash_MOSI    : OUT STD_LOGIC;
+    flash_SCLK    : OUT STD_LOGIC;
+    flash_SS      : OUT STD_LOGIC;
+    uart_rxd      : in  std_logic := '0';
+    uart_txd      : out std_logic;
+)
+{
+    SIGNAL PLL_c0     : STD_LOGIC;
+    NewComponent PLL
+    (
+        inclk0 => CLK,
+        c0     => PLL_c0,
+        c1     => sdram_clk_clk,
+    );
+    
+    LED <= NIOSDuino_Processor_po2_export(31);
+    
+    flash_SS <= NIOSDuino_Processor_po2_export(31);
+    
+    SIGNAL NIOSDuino_Processor_pi_export  : STD_LOGIC_VECTOR (31 downto 0) := (others => 'X');
+    SIGNAL NIOSDuino_Processor_po_export  : STD_LOGIC_VECTOR (31 downto 0) := (others => 'X');
+    SIGNAL NIOSDuino_Processor_po2_export  : STD_LOGIC_VECTOR (31 downto 0) := (others => 'X');
+    NewComponent NIOSDuino_Processor
+    (
+        CLK         => PLL_c0,
+        Reset       => '0',
+        sdram_addr  => sdram_addr,
+        sdram_ba    => sdram_ba,
+        sdram_cas_n => sdram_cas_n,
+        sdram_dq    => sdram_dq,
+        sdram_dqm   => sdram_dqm,
+        sdram_ras_n => sdram_ras_n,
+        sdram_we_n  => sdram_we_n,
+        flash_MISO  => flash_MISO,
+        flash_MOSI  => flash_MOSI,
+        flash_SCLK  => flash_SCLK,
+        uart_rxd    => uart_rxd,
+        uart_txd    => uart_txd,
+        pi_export   => NIOSDuino_Processor_pi_export,
+        po_export   => NIOSDuino_Processor_po_export,
+        po2_export  => NIOSDuino_Processor_po2_export,
+    );
+    
+    NewComponent Neuron_NIOS_Interface
+    (
+        pi_export  => NIOSDuino_Processor_pi_export,
+        po_export  => NIOSDuino_Processor_po_export,
+        po2_export => NIOSDuino_Processor_po2_export,
+    );
+}
