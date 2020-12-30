@@ -19,7 +19,8 @@
 			sdram_ras_n   : out   std_logic;                                        -- ras_n
 			sdram_we_n    : out   std_logic;                                        -- we_n
 			uart_rxd      : in    std_logic                     := 'X';             -- rxd
-			uart_txd      : out   std_logic                                         -- txd
+			uart_txd      : out   std_logic;                                        -- txd
+			po3_export    : out   std_logic_vector(31 downto 0)                     -- export
 		);
 	end component NIOSDuino_Core;
 

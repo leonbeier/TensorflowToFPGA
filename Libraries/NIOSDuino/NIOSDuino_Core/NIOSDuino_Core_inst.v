@@ -18,6 +18,7 @@
 		.sdram_ras_n   (<connected-to-sdram_ras_n>),   //       .ras_n
 		.sdram_we_n    (<connected-to-sdram_we_n>),    //       .we_n
 		.uart_rxd      (<connected-to-uart_rxd>),      //   uart.rxd
-		.uart_txd      (<connected-to-uart_txd>)       //       .txd
+		.uart_txd      (<connected-to-uart_txd>),      //       .txd
+		.po3_export    (<connected-to-po3_export>)     //    po3.export
 	);
 

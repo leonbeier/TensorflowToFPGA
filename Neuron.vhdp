@@ -20,7 +20,7 @@ Component Neuron
 
     Generic
     (
-        MAX_Input_Number  : NATURAL := 128;  --max. x neurons in previous layer
+        MAX_Input_Number  : NATURAL := 128;  --max. x neurons in any layer
     );
     
     Run     : IN  STD_LOGIC := '0';                           --Set to '1' for calculation
@@ -30,7 +30,7 @@ Component Neuron
     Weight  : IN  SIGNED(Weight_Width-1 downto 0);            --Weights for neurons from the previous layer
     Bias    : IN  SIGNED(Bias_Width-1 downto 0);              --Bias for this neuron
     
-    OValid  : OUT STD_LOGIC := '0';                           --'1' if
+    OValid  : BUFFER STD_LOGIC := '0';                           --'1' if
     Address : BUFFER NATURAL range 0 to MAX_Input_Number-1 := 0;  --Address of neuron in previous layer (with 100 inputs and 10 operations = 0, 10, 20, ...)
     Output  : OUT UNSIGNED(Neuron_Width-1 downto 0);
 )
@@ -46,60 +46,59 @@ Component Neuron
         
         VARIABLE sum       : SIGNED(sum_bits-1 downto 0);
         VARIABLE sum_v     : INTEGER range -1 * 2**(sum_bits-1) to 2**(sum_bits-1) - 1;
-        Case(cur_state)
+        
+        If(cur_state = start)
         {
-            When(start)
+            If(Run = '1')
             {
-                If(Run = '1')
-                {
-                    Address   <= 0;
-                    OValid    <= '0';
-                    sum       := (others => '0');
-                    cur_state := calc;
-                }
+                Address   <= 0;
+                OValid    <= '0';
+                sum       := (others => '0');
+                cur_state := calc;
             }
-            When(calc)
+        }
+        
+        If(cur_state = calc)
+        {
+            If(IValid = '1')
             {
-                If(IValid = '1')
+                sum     := sum + TO_SIGNED(TO_INTEGER(Input)*TO_INTEGER(Weight), Neuron_Width+Weight_Width)(Neuron_Width+Weight_Width-1 downto Weight_Width);
+                If(Address < Input_N-2)
                 {
-                    sum     := sum + TO_SIGNED(TO_INTEGER(Input)*TO_INTEGER(Weight), Neuron_Width+Weight_Width)(Neuron_Width+Weight_Width-1 downto Weight_Width);
-                    If(Address < Input_N)
+                    Address <= Address + 1;
+                }
+                Else
+                {
+                        --Sum = Bias + Neuron(0) * Weight(0) + ... + Neuron(Input_N-1) * Weight(Input_N-1)
+                    sum   := sum + Bias;
+                    
+                        --Sigmoid function from -16 to 16 with 16bit resolution * 2^16
+                    sum_v := TO_INTEGER(sum(sum_bits-1 downto Neuron_Width+4-Sigmoid_Res));
+                    If(sum_v > 1366)
                     {
-                        Address <= Address + 1;
+                        Output <= (others => '1');
+                        OValid <= '1';
+                        cur_state := start;
+                    }
+                    Elsif(sum_v < -1508)
+                    {
+                        Output <= (others => '0');
+                        OValid <= '1';
+                        cur_state := start;
                     }
                     Else
                     {
-                        --Sum = Bias + Neuron(0) * Weight(0) + ... + Neuron(Input_N-1) * Weight(Input_N-1)
-                        sum   := sum + Bias;
-                        
-                        --Sigmoid function from -16 to 16 with 16bit resolution * 2^16
-                        sum_v := TO_INTEGER(sum(sum_bits-1 downto Neuron_Width+4-Sigmoid_Res));
-                        If(sum_v > 1366)
-                        {
-                            Output <= (others => '1');
-                            OValid <= '1';
-                            cur_state := start;
-                        }
-                        Elsif(sum_v < -1508)
-                        {
-                            Output <= (others => '0');
-                            OValid <= '1';
-                            cur_state := start;
-                        }
-                        Else
-                        {
-                            sigmoid_addr <= sum_v+1508;
-                            cur_state := sig;
-                        }
+                        sigmoid_addr <= sum_v+1508;
+                        cur_state := sig;
                     }
                 }
             }
-            When(sig)
-            {
-                Output <= TO_UNSIGNED(sigmoid_out, Output'LENGTH);
-                OValid <= '1';
-                cur_state := start;
-            }
+        }
+        Elsif(cur_state = sig)
+        {
+            Output <= TO_UNSIGNED(sigmoid_out, Output'LENGTH);
+            OValid <= '1';
+            cur_state := start;
         }
     }
     

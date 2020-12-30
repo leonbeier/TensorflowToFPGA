@@ -19,7 +19,8 @@ module NIOSDuino_Core (
 	sdram_ras_n,
 	sdram_we_n,
 	uart_rxd,
-	uart_txd);	
+	uart_txd,
+	po3_export);	
 
 	input		clk_in_clk;
 	input		flash_MISO;
@@ -41,4 +42,5 @@ module NIOSDuino_Core (
 	output		sdram_we_n;
 	input		uart_rxd;
 	output		uart_txd;
+	output	[31:0]	po3_export;
 endmodule

@@ -66,6 +66,7 @@ Component NIOSDuino_Processor
     pi_export                  : IN    STD_LOGIC_VECTOR(31 downto 0) := (others => 'X');
     po_export                  : OUT   STD_LOGIC_VECTOR(31 downto 0) := (others => 'X');
     po2_export                 : OUT   STD_LOGIC_VECTOR(31 downto 0) := (others => 'X');
+    po3_export                 : OUT   STD_LOGIC_VECTOR(31 downto 0) := (others => 'X');
 )
 {
     Connections
@@ -131,6 +132,7 @@ Component NIOSDuino_Processor
                 pi_export             : in    std_logic_vector(31 downto 0) := (others => '0'); --        pio_led.export
                 po_export             : out   std_logic_vector(31 downto 0) := (others => '0'); --        pio_led.export
                 po2_export            : out   std_logic_vector(31 downto 0) := (others => '0'); --        pio_led.export
+                po3_export            : out   std_logic_vector(31 downto 0) := (others => '0'); --        pio_led.export
                 reset_reset_n         : in    std_logic                     := '1';             --          reset.reset_n
                 sdram_addr            : out   std_logic_vector(11 downto 0);                    --          sdram.addr
                 sdram_ba              : out   std_logic_vector(1 downto 0);                     --               .ba
@@ -159,6 +161,7 @@ Component NIOSDuino_Processor
             pi_export             => pi_export,
             po_export             => po_export,
             po2_export            => po2_export,
+            po3_export            => po3_export,
             reset_reset_n         => reset_reset_n,
             sdram_addr            => sdram_addr,
             sdram_ba              => sdram_ba,

@@ -34,6 +34,7 @@ Main
     SIGNAL NIOSDuino_Processor_pi_export  : STD_LOGIC_VECTOR (31 downto 0) := (others => 'X');
     SIGNAL NIOSDuino_Processor_po_export  : STD_LOGIC_VECTOR (31 downto 0) := (others => 'X');
     SIGNAL NIOSDuino_Processor_po2_export  : STD_LOGIC_VECTOR (31 downto 0) := (others => 'X');
+    SIGNAL NIOSDuino_Processor_po3_export  : STD_LOGIC_VECTOR (31 downto 0) := (others => 'X');
     NewComponent NIOSDuino_Processor
     (
         CLK         => PLL_c0,
@@ -53,12 +54,59 @@ Main
         pi_export   => NIOSDuino_Processor_pi_export,
         po_export   => NIOSDuino_Processor_po_export,
         po2_export  => NIOSDuino_Processor_po2_export,
+        po3_export  => NIOSDuino_Processor_po3_export,
     );
     
+    SIGNAL Neuron_Busy              : STD_LOGIC := '0';
+    SIGNAL Neuron_Data_In           : UNSIGNED         (Neuron_Width-1 downto 0);
+    SIGNAL Neuron_In_Addr           : NATURAL          range 0 to 784-1 := 0;
+    SIGNAL Neuron_In_Valid          : STD_LOGIC := '0';
+    SIGNAL Neuron_Finished          : STD_LOGIC := '1';
+    SIGNAL Neuron_Data_Out          : UNSIGNED         (Neuron_Width-1 downto 0);
+    SIGNAL Neuron_Out_Addr          : NATURAL          range 0 to 128-1 := 0;
+    SIGNAL Neuron_Out_Valid         : STD_LOGIC := '0';
     NewComponent Neuron_NIOS_Interface
     (
-        pi_export  => NIOSDuino_Processor_pi_export,
-        po_export  => NIOSDuino_Processor_po_export,
-        po2_export => NIOSDuino_Processor_po2_export,
+        MAX_Input_Number  => 784,
+        MAX_Output_Number => 128,
+
+        CLK               => PLL_c0,
+        
+        pi_export         => NIOSDuino_Processor_pi_export,
+        po_export         => NIOSDuino_Processor_po_export,
+        po2_export        => NIOSDuino_Processor_po2_export,
+        po3_export        => NIOSDuino_Processor_po3_export,
+        
+        Busy              => Neuron_Busy,
+        Data_In           => Neuron_Data_In,
+        In_Addr           => Neuron_In_Addr,
+        In_Valid          => Neuron_In_Valid,
+        Finished          => Neuron_Finished,
+        
+        Data_Out          => Neuron_Data_Out,
+        Out_Addr          => Neuron_Out_Addr,
+        Out_Valid         => Neuron_Out_Valid,
+    );
+    
+    ISSP_probe(31)              <= Neuron_Busy;
+    ISSP_probe(30)              <= Neuron_Out_Valid;
+    ISSP_probe(15 downto 0)     <= STD_LOGIC_VECTOR(Neuron_Data_Out);
+    Neuron_Data_In(15 downto 8) <= UNSIGNED(ISSP_source);
+    Neuron_In_Addr              <= TO_INTEGER(UNSIGNED(ISSP_source2));
+    
+    SIGNAL ISSP_source : std_logic_vector (7 downto 0);
+    SIGNAL ISSP_probe  : std_logic_vector (31 downto 0) := (others => 'X');
+    NewComponent ISSP
+    (
+        source => ISSP_source,
+        probe  => ISSP_probe,
+    );
+    
+    SIGNAL ISSP_source2 : std_logic_vector (7 downto 0);
+    SIGNAL ISSP_probe2  : std_logic_vector (31 downto 0) := (others => 'X');
+    NewComponent ISSP
+    (
+        source => ISSP_source2,
+        probe  => ISSP_probe2,
     );
 }

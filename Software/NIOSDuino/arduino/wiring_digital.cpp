@@ -68,10 +68,16 @@ void digitalWrite(uint8_t pin, uint8_t val)
 		if(val) IOWR_ALTERA_AVALON_PIO_SET_BITS(PIO_0_BASE, 1 << pin);
 		else IOWR_ALTERA_AVALON_PIO_CLEAR_BITS(PIO_0_BASE, 1 << pin);
 	}
-	else{
+	else if(pin < 64){
 		if(val) IOWR_ALTERA_AVALON_PIO_SET_BITS(PIO_2_BASE, 1 << (pin-32));
 		else IOWR_ALTERA_AVALON_PIO_CLEAR_BITS(PIO_2_BASE, 1 << (pin-32));
 	}
+#if PIO_3_BASE
+	else{
+		if(val) IOWR_ALTERA_AVALON_PIO_SET_BITS(PIO_3_BASE, 1 << (pin-32));
+		else IOWR_ALTERA_AVALON_PIO_CLEAR_BITS(PIO_3_BASE, 1 << (pin-32));
+	}
+#endif
 #else
 	if(val) IOWR_ALTERA_AVALON_PIO_SET_BITS(PIO_0_BASE, 1 << pin);
 	else IOWR_ALTERA_AVALON_PIO_CLEAR_BITS(PIO_0_BASE, 1 << pin);
