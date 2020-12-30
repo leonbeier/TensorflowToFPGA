@@ -3,6 +3,7 @@ Generated/
 incremental_db/
 output_files/
 db/
+Modelsim/
 
 ## Quartus specific.
 ## *.qsf

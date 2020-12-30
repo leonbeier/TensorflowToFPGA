@@ -56,6 +56,9 @@
     </Items>
   </Items>
   <Items xsi:type="ProjectFolder">
+    <Header>Modelsim</Header>
+  </Items>
+  <Items xsi:type="ProjectFolder">
     <Header>Software</Header>
     <Items xsi:type="ProjectFolder">
       <Header>NIOSDuino</Header>
@@ -72,6 +75,9 @@
   </Items>
   <Items xsi:type="ProjectFileVHDP">
     <Header>Neuron_NIOS_Interface.vhdp</Header>
+  </Items>
+  <Items xsi:type="ProjectFileGHDP">
+    <Header>Neuron_NIOS_Interface_Sim.ghdp</Header>
   </Items>
   <Items xsi:type="ProjectFileVHDL">
     <Header>Sigmoid.vhd</Header>

@@ -1,0 +1,218 @@
+Component Neuron_NIOS_Interface_tb
+(
+    Include
+    (
+        Neuron_Package.all,
+    );
+)
+{
+    SIGNAL finished : STD_LOGIC:= '0';
+    CONSTANT period_time : TIME := 83333 ps;
+
+    Process Sim_finished()
+    {
+        wait for 1000 us;
+        finished <= '1';
+        wait;
+    }
+
+    NewComponent Neuron_NIOS_Interface
+    (
+        MAX_Input_Number => MAX_Input_Number,
+        MAX_Output_Number => MAX_Output_Number,
+        pi_export => pi_export,
+        po_export => po_export,
+        po2_export => po2_export,
+        po3_export => po3_export,
+        Busy => Busy,
+        Data_In => Data_In,
+        In_Addr => In_Addr,
+        In_Valid => In_Valid,
+        Finished => Finished2,
+        Data_Out => Data_Out,
+        Out_Addr => Out_Addr,
+        Out_Valid => Out_Valid,
+        CLK => CLK,
+    );
+
+    SIGNAL MAX_Input_Number : NATURAL  := 784;
+    SIGNAL MAX_Output_Number : NATURAL  := 128;
+    SIGNAL pi_export : STD_LOGIC_VECTOR (31 downto 0) := (others => 'X');
+    SIGNAL po_export : STD_LOGIC_VECTOR (31 downto 0) := (others => 'X');
+    SIGNAL po2_export : STD_LOGIC_VECTOR (31 downto 0) := (others => 'X');
+    SIGNAL po3_export : STD_LOGIC_VECTOR (31 downto 0) := (others => 'X');
+    SIGNAL Busy : STD_LOGIC  := '0';
+    SIGNAL Data_In : UNSIGNED (Neuron_Width-1 downto 0);
+    SIGNAL In_Addr : NATURAL range 0 to MAX_Input_Number-1 := 0;
+    SIGNAL In_Valid : STD_LOGIC  := '0';
+    SIGNAL Finished2 : STD_LOGIC  := '0';
+    SIGNAL Data_Out : UNSIGNED (Neuron_Width-1 downto 0);
+    SIGNAL Out_Addr : NATURAL range 0 to MAX_Output_Number-1 := 0;
+    SIGNAL Out_Valid : STD_LOGIC  := '0';
+    SIGNAL CLK : STD_LOGIC := '0';
+
+
+    Process Sim_po_export()
+    {
+        While(finished /= '1')
+        {
+            po_export(18) <= '0';
+            po_export(19) <= '0';
+            po_export(20) <= '0';
+            po_export(21) <= '0';
+            wait for 4 us;
+            po_export(16 downto 0) <= STD_LOGIC_VECTOR(TO_UNSIGNED(10,17));
+            po_export(17) <= '1';
+            wait for 1 us;
+            for(j in 1 to 9)
+            {
+                for (i in 0 to 4)
+                {
+                    po_export(18) <= '1';
+                    wait for period_time*2;
+                    po_export(18) <= '0';
+                    wait for period_time*2;
+                }
+                po_export(16 downto 0) <= STD_LOGIC_VECTOR(TO_UNSIGNED(j,17));
+                wait for 400 ns;
+                po_export(19) <= '1';
+                wait for period_time*2;
+                po_export(19) <= '0';
+                wait for 400 ns;
+            }
+            for (i in 0 to 4)
+            {
+                po_export(18) <= '1';
+                wait for period_time*2;
+                po_export(18) <= '0';
+                wait for period_time*2;
+            }
+            po_export(16 downto 0) <= STD_LOGIC_VECTOR(TO_UNSIGNED(0,17));
+            wait for 400 ns;
+            po_export(19) <= '1';
+            wait for period_time*2;
+            po_export(19) <= '0';
+            wait for 400 ns;
+            po_export(16 downto 0) <= STD_LOGIC_VECTOR(TO_UNSIGNED(10,17));
+            wait for 400 ns;
+            po_export(20) <= '1';
+            wait for period_time*2;
+            po_export(20) <= '0';
+            wait for 2 us;
+            po_export(21) <= '1';
+            wait;
+        }
+        wait;
+    }
+
+    Process Sim_po2_export()
+    {
+        While(finished /= '1')
+        {
+            
+            po2_export <= x"00005424";
+            wait for 1 ms;
+            wait;
+        }
+        wait;
+    }
+
+    Process Sim_po3_export()
+    {
+        While(finished /= '1')
+        {
+            po3_export <= x"0000a424";
+            wait for 1 ms;
+            wait;
+        }
+        wait;
+    }
+
+    Process Sim_Data_In()
+    {
+        While(finished /= '1')
+        {
+            Data_In <= x"e42f";
+            wait for 83333 ps;
+            Data_In <= x"152f";
+            wait for 83333 ps;
+            Data_In <= x"452f";
+            wait for 83333 ps;
+            Data_In <= x"9520";
+            wait for 83333 ps;
+            Data_In <= x"f520";
+            wait for 83333 ps;
+            Data_In <= x"9520";
+            wait for 83333 ps;
+            Data_In <= x"6520";
+            wait for 83333 ps;
+            Data_In <= x"3520";
+            wait for 83333 ps;
+            Data_In <= x"2520";
+            wait for 83333 ps;
+            Data_In <= x"6520";
+            wait for 83333 ps;
+            wait;
+        }
+        wait;
+    }
+
+    Process Sim_In_Addr()
+    {
+        While(finished /= '1')
+        {
+            For(i in 0 to 10)
+            {
+                In_Addr <= i;
+                wait for 83333 ps;
+            }
+            wait;
+        }
+        wait;
+    }
+
+    Process Sim_In_Valid()
+    {
+        While(finished /= '1')
+        {
+            In_Valid <= '1';
+            wait for 1 ms;
+            wait;
+        }
+        wait;
+    }
+
+    Process Sim_Finished2()
+    {
+        While(finished /= '1')
+        {
+            Finished2 <= '0';
+            wait for 3 us;
+            Finished2 <= '1';
+            wait for 1 ms;
+            wait;
+        }
+        wait;
+    }
+
+    Process Sim_Out_Addr()
+    {
+        While(finished /= '1')
+        {
+            wait;
+        }
+        wait;
+    }
+
+    Process Sim_CLK()
+    {
+        While(finished /= '1')
+        {
+            CLK <= '0';
+            wait for period_time/2;
+            CLK <= '1';
+            wait for period_time/2;
+        }
+        wait;
+    }
+}

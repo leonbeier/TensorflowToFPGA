@@ -46,6 +46,13 @@ Component Neuron_NIOS_Interface
         If(falling_edge(CLK))
         {
             VARIABLE myState : state_type := fill;
+            
+            If(myState /= run)
+            {
+                Data_Out <= out_ram_data_o;
+                out_ram_addr <= Out_Addr;
+            }
+            
             Case(myState)
             {
                 When(fill)
@@ -61,9 +68,6 @@ Component Neuron_NIOS_Interface
                         in_ram_data_i <= Data_In;
                         in_ram_addr   <= In_Addr;
                         in_ram_write  <= In_Valid;
-                        
-                        Data_Out <= out_ram_data_o;
-                        out_ram_addr <= Out_Addr;
                         
                         Neuron_Run     <= '0';
                     }
@@ -82,12 +86,12 @@ Component Neuron_NIOS_Interface
                 }
                 When(run)
                 {
-                    If(po_export(21) = '1')
+                    If(po_export(21) = '1' and control_reg(2) = '0')
                     {
                         Out_Valid <= '1';
                         myState   := fill;
                     }
-                    If(po_export(20) = '1')
+                    If(po_export(20) = '1' and control_reg(1) = '0')
                     {
                         VARIABLE next_layer : BOOLEAN := false;
                         --Save number of input bits from the previous layer
@@ -95,7 +99,7 @@ Component Neuron_NIOS_Interface
                         next_layer := true;
                         shift_addr := 0;
                     }
-                    If(po_export(19) = '1')
+                    If(po_export(19) = '1' and control_reg(0) = '0')
                     {
                         VARIABLE end_neuron  : BOOLEAN := false;
                         VARIABLE Last_Neuron : NATURAL   range 0 to MAX_Input_Number := 0;
@@ -104,6 +108,8 @@ Component Neuron_NIOS_Interface
                         Last_Neuron := Current_Neuron;
                         Current_Neuron <= TO_INTEGER(UNSIGNED(po_export(16 downto 0)));
                     }
+                    VARIABLE control_reg : STD_LOGIC_VECTOR(2 downto 0);
+                    control_reg := po_export(21 downto 19);
                     
                     pi_export(16)  <= Neuron_OValid;
 
@@ -150,7 +156,6 @@ Component Neuron_NIOS_Interface
 
                         If(shift_addr = Input_Number)
                         {
-                            in_ram_write   <= '0';
                             pi_export(16)  <= '1';
                             next_layer     := false;
                         }
@@ -159,6 +164,10 @@ Component Neuron_NIOS_Interface
                             out_ram_addr   <= shift_addr;
                             shift_addr     := shift_addr + 1;
                         }
+                    }
+                    Else
+                    {
+                        in_ram_write   <= '0';
                     }
                 }
             }

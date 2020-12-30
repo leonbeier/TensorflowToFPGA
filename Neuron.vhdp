@@ -31,7 +31,7 @@ Component Neuron
     Bias    : IN  SIGNED(Bias_Width-1 downto 0);              --Bias for this neuron
     
     OValid  : BUFFER STD_LOGIC := '0';                           --'1' if
-    Address : BUFFER NATURAL range 0 to MAX_Input_Number-1 := 0;  --Address of neuron in previous layer (with 100 inputs and 10 operations = 0, 10, 20, ...)
+    Address : OUT NATURAL range 0 to MAX_Input_Number-1 := 0;  --Address of neuron in previous layer (with 100 inputs and 10 operations = 0, 10, 20, ...)
     Output  : OUT UNSIGNED(Neuron_Width-1 downto 0);
 )
 {
@@ -47,11 +47,13 @@ Component Neuron
         VARIABLE sum       : SIGNED(sum_bits-1 downto 0);
         VARIABLE sum_v     : INTEGER range -1 * 2**(sum_bits-1) to 2**(sum_bits-1) - 1;
         
+        VARIABLE addr      : NATURAL range 0 to MAX_Input_Number-1 := 0;
+        
         If(cur_state = start)
         {
             If(Run = '1')
             {
-                Address   <= 0;
+                addr      := 0;
                 OValid    <= '0';
                 sum       := (others => '0');
                 cur_state := calc;
@@ -63,9 +65,9 @@ Component Neuron
             If(IValid = '1')
             {
                 sum     := sum + TO_SIGNED(TO_INTEGER(Input)*TO_INTEGER(Weight), Neuron_Width+Weight_Width)(Neuron_Width+Weight_Width-1 downto Weight_Width);
-                If(Address < Input_N-2)
+                If(addr < Input_N-1)
                 {
-                    Address <= Address + 1;
+                    addr := addr + 1;
                 }
                 Else
                 {
@@ -91,6 +93,8 @@ Component Neuron
                         sigmoid_addr <= sum_v+1508;
                         cur_state := sig;
                     }
+                    
+                    addr      := 0;
                 }
             }
         }
@@ -100,6 +104,8 @@ Component Neuron
             OValid <= '1';
             cur_state := start;
         }
+        
+        Address <= addr;
     }
     
     SIGNAL sigmoid_addr : NATURAL range 0 to 2874 := 0;

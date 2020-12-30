@@ -69,6 +69,16 @@ set_global_assignment -name TCL_SCRIPT_FILE Libraries/NIOSDuino/avalon_pwm_hw.tc
 set_global_assignment -name TCL_SCRIPT_FILE Libraries/NIOSDuino/avalon_pwm_sw.tcl
 set_global_assignment -name TCL_SCRIPT_FILE Libraries/NIOSDuino/avalon_pwm_hw.tcl
 set_global_assignment -name TCL_SCRIPT_FILE Libraries/NIOSDuino/avalon_pwm_sw.tcl
+set_global_assignment -name TCL_SCRIPT_FILE Libraries/NIOSDuino/avalon_pwm_hw.tcl
+set_global_assignment -name TCL_SCRIPT_FILE Libraries/NIOSDuino/avalon_pwm_sw.tcl
+set_global_assignment -name TCL_SCRIPT_FILE Libraries/NIOSDuino/avalon_pwm_hw.tcl
+set_global_assignment -name TCL_SCRIPT_FILE Libraries/NIOSDuino/avalon_pwm_sw.tcl
+set_global_assignment -name TCL_SCRIPT_FILE Libraries/NIOSDuino/avalon_pwm_hw.tcl
+set_global_assignment -name TCL_SCRIPT_FILE Libraries/NIOSDuino/avalon_pwm_sw.tcl
+set_global_assignment -name TCL_SCRIPT_FILE Libraries/NIOSDuino/avalon_pwm_hw.tcl
+set_global_assignment -name TCL_SCRIPT_FILE Libraries/NIOSDuino/avalon_pwm_sw.tcl
+set_global_assignment -name TCL_SCRIPT_FILE Libraries/NIOSDuino/avalon_pwm_hw.tcl
+set_global_assignment -name TCL_SCRIPT_FILE Libraries/NIOSDuino/avalon_pwm_sw.tcl
 set_global_assignment -name NUM_PARALLEL_PROCESSORS 8
 set_global_assignment -name INTERNAL_FLASH_UPDATE_MODE "SINGLE IMAGE"
 set_global_assignment -name VHDL_FILE Generated/NIOSDuino_Processor.vhd
