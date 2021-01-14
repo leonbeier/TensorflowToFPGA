@@ -146,7 +146,7 @@ namespace TTF_Config
                         else error = !WaitForResponse("Biases for Layer", true, true);
 
                         if (error) Console.WriteLine("Error-------------------------------------------------------------------------");
-                    } while (receiveMessage.Contains("Error"));
+                    } while (error);
                     
                     //Send 0x0000 until receives (Should not end up here)
                     if (error)
@@ -220,7 +220,7 @@ namespace TTF_Config
                     else error = !WaitForResponse("Erase Flash...", true, true);
 
                     if (error) Console.WriteLine("Error-------------------------------------------------------------------------");
-                } while (receiveMessage.Contains("Error"));
+                } while (error);
                 fi++;
             }
 
